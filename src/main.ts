@@ -1,9 +1,10 @@
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
     <h3>takiye perogi</h3>
+    
   </div>`
 
-
+const input = document.getElementById('imageInput') as HTMLInputElement;
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d')!;
 if (!ctx) throw new Error("I cannot work with this canvas thing you gave me");
@@ -14,16 +15,30 @@ let endX = 0;
 let endY = 0;
 let isSelecting = false;
 
-const img = new Image();
-img.src = "./public/23006218-3-Brown-bear-in-lupine-meadow.jpg";
 
-img.onload = () => {
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-};
+let img = new Image();
 
-img.onerror = (err) => {
-  console.error("Failed to load image", err);
-};
+input.addEventListener('change', (_) => {
+  const file = input.files?.[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = (event) => {
+    img = new Image();
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+    };
+    img.src = event.target?.result as string;
+  };
+  img.onerror = (err) => {
+    console.error("Failed to load image", err);
+  };
+
+  reader.readAsDataURL(file);
+});
 
 canvas.addEventListener('mousedown', (e) => {
   const insideCanvas =
@@ -56,9 +71,17 @@ canvas.addEventListener('mouseup', () => {
   const cropWidth = endX - startX;
   const cropHeight = endY - startY;
 
-  console.log("x, y and widths", startX, startY, cropWidth, cropHeight, "\n Start and end", startX, startY, endX, endY)
+  const width = Math.abs(cropWidth);
+  const height = Math.abs(cropHeight);
+
+  const x = cropWidth > 0 ? startX : endX;
+  const y = cropHeight > 0 ? startY : endY;
+
+
+  console.log("x, y and widths", startX, startY, width, height,
+    "\n Start and end", startX, startY, endX, endY)
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(img, startX, startY, cropWidth, cropHeight,
-    0, 0, cropWidth, cropHeight)
+  ctx.drawImage(img, x, y, width, height,
+    0, 0, width, height)
 })
