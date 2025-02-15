@@ -25,7 +25,7 @@ let draggingEdge: 'left' | 'right' | 'top' | 'bottom' | null = null;
 let startMouseX = 0;
 let startMouseY = 0;
 
-input.addEventListener('change', (e) => {
+input.addEventListener('change', (_) => {
   const file = input.files?.[0];
   if (!file) return;
 
