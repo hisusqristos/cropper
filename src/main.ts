@@ -9,6 +9,8 @@ const input = document.getElementById('imageInput') as HTMLInputElement;
 const downloadBtn = document.getElementById('downloadBtn') as HTMLButtonElement;
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const cropBtn = document.getElementById('cropBtn') as HTMLButtonElement;
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
 
 const ctx = canvas.getContext('2d')!;
 if (!ctx) throw new Error("I cannot work with this canvas thing you gave me");
@@ -84,6 +86,8 @@ canvas.addEventListener('mouseup', () => {
 cropBtn.addEventListener('click', () => {
   const croppedCanvas = document.createElement('canvas');
   const croppedCtx = croppedCanvas.getContext('2d')!;
+  const buttonColor = urlParams.get("color") || "blue"
+
   croppedCanvas.width = cropWidth;
   croppedCanvas.height = cropHeight;
 
@@ -99,6 +103,7 @@ cropBtn.addEventListener('click', () => {
 
   cropBtn.style.display = "none";
   downloadBtn.style.display = "block"
+  downloadBtn.style.backgroundColor = buttonColor
 });
 
 
