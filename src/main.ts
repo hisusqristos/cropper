@@ -109,8 +109,8 @@ cropBtn.addEventListener('click', () => {
 
 function drawCropRectangle() {
   ctx.drawImage(img, 0, 0);
-
-  ctx.strokeStyle = 'red';
+  const stroke = urlParams.get("stroke") || 'red'
+  ctx.strokeStyle = stroke;
   ctx.lineWidth = 2;
   ctx.strokeRect(cropX, cropY, cropWidth, cropHeight);
 

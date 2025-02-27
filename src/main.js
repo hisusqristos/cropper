@@ -89,7 +89,8 @@ cropBtn.addEventListener('click', function () {
 });
 function drawCropRectangle() {
     ctx.drawImage(img, 0, 0);
-    ctx.strokeStyle = 'red';
+    var stroke = urlParams.get("stroke") || 'red';
+    ctx.strokeStyle = stroke;
     ctx.lineWidth = 2;
     ctx.strokeRect(cropX, cropY, cropWidth, cropHeight);
     // 3x3 reshotka of cropper
